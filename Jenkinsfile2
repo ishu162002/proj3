@@ -44,12 +44,12 @@ pipeline {
         sh 'docker push ishupurwar/insure:1.0'
             }
     } */
-    stage('Deploy Application using Ansible') {
-      steps {
-        ansiblePlaybook credentialsId: 'sshid', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'deploy.yml', vaultTmpPath: ''
-            }
+     stage('Deploy using Ansible') {
+    steps {
+        ansiblePlaybook(
+            playbook: 'deploy.yml',
+            inventory: 'inventory.ini',
+            extras: '-v'
+        )
     }
-
-  }
 }
-
