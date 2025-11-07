@@ -10,11 +10,11 @@ pipeline {
     }
     
     stage('Package the Application') {
-      steps {
-        echo " Packaing the Application"
-        sh 'mvn clean package'
-            }
+    steps {
+        sh '/opt/maven/bin/mvn clean package'
     }
+}
+
     
    /* stage('Publish Reports using HTML') {
       steps {
