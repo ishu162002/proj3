@@ -6,50 +6,55 @@ pipeline {
       steps {
         echo 'Checkout the source code from GitHub'
         git branch: 'main', url: 'https://github.com/ishu162002/InsureMe.git'
-            }
+      }
     }
     
-   stage('Package the Application') {
-    steps {
+    stage('Package the Application') {
+      steps {
         echo "Packaging the Application"
         withMaven(maven: 'maven') {
-            sh 'mvn clean package'
+          sh 'mvn clean package'
         }
+      }
     }
-}
 
-    
-   /* stage('Publish Reports using HTML') {
+    /* stage('Publish Reports using HTML') {
       steps {
-      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/Insure-Project/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-            }
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
+          reportDir: '/var/lib/jenkins/workspace/Insure-Project/target/surefire-reports', 
+          reportFiles: 'index.html', 
+          reportName: 'HTML Report'])
+      }
     } 
     
     stage('Docker Image Creation') {
       steps {
         sh 'docker build -t ishupurwar/insure:1.0 .'
-            }
+      }
     }
-     stage('Docker-Login') {
-           steps {
-              withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
-               sh 'docker login -u ${dockerlogin} -p ${dockerpassword}'
-               // withCredentials([string(credentialsId: 'docker', variable: 'dockervariable')]) {                   
-                        }
-                }
-}
+
+    stage('Docker-Login') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
+          sh 'docker login -u ${dockerlogin} -p ${dockerpassword}'
+        }
+      }
+    }
 
     stage('Push Image to DockerHub') {
       steps {
         sh 'docker push ishupurwar/insure:1.0'
-            }
+      }
     } */
-     stage('Deploy using Ansible') {
-    steps {
+
+    stage('Deploy using Ansible') {
+      steps {
         ansiblePlaybook(
-            playbook: 'deploy.yml',
-            inventory: 'inventory.ini',
-            extras: '-v'
+          playbook: 'deploy.yml',
+          inventory: 'inventory.ini',
+          extras: '-v'
         )
+      }
     }
-}
+  }  // ✅ closes stages
+}    // ✅ closes pipeline
