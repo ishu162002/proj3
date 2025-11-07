@@ -9,9 +9,12 @@ pipeline {
             }
     }
     
-    stage('Package the Application') {
+   stage('Package the Application') {
     steps {
-        sh '/opt/maven/bin/mvn clean package'
+        echo "Packaging the Application"
+        withMaven(maven: 'maven') {
+            sh 'mvn clean package'
+        }
     }
 }
 
